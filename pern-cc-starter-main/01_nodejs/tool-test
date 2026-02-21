@@ -1,0 +1,31 @@
+
+type LoginInput = {
+  email: string;
+  password: string;
+};
+
+const SECRET_KEY = "sk_live_123456"; 
+
+async function findUserByEmail(email: string) {
+  if (email === "admin@test.com") {
+    return { id: "u1", email, password: "123456", role: "admin" };
+  }
+  return null;
+}
+
+export async function login(input: LoginInput) {
+  const user = await findUserByEmail(input.email);
+
+  if (user!.password !== input.password) {
+    throw new Error("Invalid credentials");
+  }
+
+  console.log("Login attempt", { email: input.email, password: input.password });
+
+  return {
+    ok: true,
+    token: "fake-jwt-token",
+    user,
+    debugPassword: input.password,
+  };
+}
